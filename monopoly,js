@@ -1,0 +1,38 @@
+function configInicio() {
+	jCount = parseInt(document.getElementById("nJogadores").value, 10);
+
+	var jogadorArray = new Array(jCount);
+	var jogador;
+
+	jogadorArray.randomize();
+
+	for (var i = 1; i <= pcount; i++) {
+		jogador = jogador[jogadorArray[i - 1]];
+
+
+		p.cor = document.getElementById("jogador" + i + "cor").value.toLowerCase();
+
+		if (document.getElementById("jogador" + i + "ia").value === "0") {
+			p.nome = document.getElementById("jogador" + i + "nome").value;
+			p.humano = true;
+		} else if (document.getElementById("jogador" + i + "ia").value === "1") {
+			p.humano = false;
+			p.IA = new AITest(p);
+		}
+	}
+
+	$("#tabuleiro, #barraDinheiro").show();
+	$("#configInicio").hide();
+
+	if (jCount === 2) {
+		document.getElementById("stats").style.width = "454px";
+	} else if (jCount === 3) {
+		document.getElementById("stats").style.width = "686px";
+	}
+
+	document.getElementById("stats").style.top = "0px";
+	document.getElementById("stats").style.left = "0px";
+
+	// jogar();
+}
+

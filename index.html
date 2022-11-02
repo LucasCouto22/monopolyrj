@@ -7,11 +7,11 @@
     <title>Monopoly RJ</title>
 </head>
 <body>
-    <div id="config-inicial">
+    <div id="configInicial">
 		<div style="margin-bottom: 20px;">
 			Quantas pessoas vão jogar?
             <div style="margin-top: 5px;">
-                <select id="n-jogadores" title="Seleciona o número de jogadores.">
+                <select id="nJogadores" title="Seleciona o número de jogadores.">
                     <option>2</option>
                     <option>3</option>
                     <option>4</option>
@@ -25,7 +25,7 @@
 
         <div id="jogador1input" class="jogador-input">
 			Jogador 1: <input type="text" id="jogador1nome" title="Nome" maxlength="20" value="Jogador 1" />
-			<select id="player1color" title="Player color">
+			<select id="jogador1cor" title="Cor do Jogador">
 				<option style="color: rgb(2, 216, 216);">Ciano</option>
 				<option style="color: black;">Preto</option>
 				<option style="color: blue;">Azul</option>
@@ -43,13 +43,206 @@
 				<option style="color: rgb(0, 128, 107);">Verde água</option>
 				<option style="color: rgb(179, 179, 0);">Amarelo</option>
 			</select>
-			<select id="jogador1ai" title="Escolhe se o player é um humano ou o computador" 
+			<select id="jogador1ia" title="Escolhe se o player é um humano ou o computador" 
                 onclick="document.getElementById('jogador1nome').disabled = this.value !== '0';">
 				<option value="0" selected="selected">Humano</option>
 				<option value="1">IA</option>
 			</select>
 		</div>
 
-		
+         <div id="jogador2input" class="jogador-input">
+			Jogador 2: <input type="text" id="jogador2nome" title="Nome" maxlength="20" value="Jogador 2" />
+			<select id="jogador2cor" title="Cor do Jogador">
+				<option style="color: rgb(2, 216, 216);">Ciano</option>
+				<option style="color: black;">Preto</option>
+				<option style="color: blue;">Azul</option>
+				<option style="color: fuchsia;">Rosa</option>
+				<option style="color: rgb(89, 89, 89);">Cinza</option>
+				<option style="color: green;">Verde</option>
+				<option style="color: rgb(15, 223, 15);">Verde folha</option>
+				<option style="color: maroon;">Marrom</option>
+				<option style="color: navy;">Azul marinho</option>
+				<option style="color: olive;">Verde musgo</option>
+				<option style="color: orange;">Laranja</option>
+				<option selected="selected" style="color: purple;">Roxo</option>
+				<option style="color: red;">Vermelho</option>
+				<option style="color: rgb(155, 155, 155);">Prata</option>
+				<option style="color: rgb(0, 128, 107);">Verde água</option>
+				<option style="color: rgb(179, 179, 0);">Amarelo</option>
+			</select>
+			<select id="jogador2ia" title="Escolhe se o player é um humano ou o computador" 
+                onclick="document.getElementById('jogador2nome').disabled = this.value !== '0';">
+				<option value="0" selected="selected">Humano</option>
+				<option value="1">IA</option>
+			</select>
+		</div>
+
+        <div id="jogador3input" class="jogador-input">
+			Jogador 3: <input type="text" id="jogador3nome" title="Nome" maxlength="20" value="Jogador 3" />
+			<select id="jogador3cor" title="Cor do Jogador">
+				<option style="color: rgb(2, 216, 216);">Ciano</option>
+				<option style="color: black;">Preto</option>
+				<option style="color: blue;">Azul</option>
+				<option style="color: fuchsia;">Rosa</option>
+				<option style="color: rgb(89, 89, 89);">Cinza</option>
+				<option style="color: green;">Verde</option>
+				<option style="color: rgb(15, 223, 15);">Verde folha</option>
+				<option style="color: maroon;">Marrom</option>
+				<option style="color: navy;">Azul marinho</option>
+				<option style="color: olive;">Verde musgo</option>
+				<option style="color: orange;">Laranja</option>
+				<option style="color: purple;">Roxo</option>
+				<option selected="selected" style="color: red;">Vermelho</option>
+				<option style="color: rgb(155, 155, 155);">Prata</option>
+				<option style="color: rgb(0, 128, 107);">Verde água</option>
+				<option style="color: rgb(179, 179, 0);">Amarelo</option>
+			</select>
+			<select id="jogador3ia" title="Escolhe se o player é um humano ou o computador" 
+                onclick="document.getElementById('jogador3nome').disabled = this.value !== '0';">
+				<option value="0" selected="selected">Humano</option>
+				<option value="1">IA</option>
+			</select>
+		</div>
+
+        <div id="jogador4input" class="jogador-input">
+			Jogador 4: <input type="text" id="jogador4nome" title="Nome" maxlength="20" value="Jogador 4" />
+			<select id="jogador4cor" title="Cor do Jogador">
+				<option style="color: rgb(2, 216, 216);">Ciano</option>
+				<option style="color: black;">Preto</option>
+				<option style="color: blue;">Azul</option>
+				<option style="color: fuchsia;">Rosa</option>
+				<option selected="selected" style="color: rgb(89, 89, 89);">Cinza</option>
+				<option style="color: green;">Verde</option>
+				<option style="color: rgb(15, 223, 15);">Verde folha</option>
+				<option style="color: maroon;">Marrom</option>
+				<option style="color: navy;">Azul marinho</option>
+				<option style="color: olive;">Verde musgo</option>
+				<option style="color: orange;">Laranja</option>
+				<option style="color: purple;">Roxo</option>
+				<option style="color: red;">Vermelho</option>
+				<option style="color: rgb(155, 155, 155);">Prata</option>
+				<option style="color: rgb(0, 128, 107);">Verde água</option>
+				<option style="color: rgb(179, 179, 0);">Amarelo</option>
+			</select>
+			<select id="jogador4ia" title="Escolhe se o player é um humano ou o computador" 
+                onclick="document.getElementById('jogador4nome').disabled = this.value !== '0';">
+				<option value="0" selected="selected">Humano</option>
+				<option value="1">IA</option>
+			</select>
+		</div>
+
+        <div id="jogador5input" class="jogador-input">
+			Jogador 5: <input type="text" id="jogador5nome" title="Nome" maxlength="20" value="Jogador 5" />
+			<select id="jogador5cor" title="Cor do Jogador">
+				<option style="color: rgb(2, 216, 216);">Ciano</option>
+				<option style="color: black;">Preto</option>
+				<option style="color: blue;">Azul</option>
+				<option style="color: fuchsia;">Rosa</option>
+				<option style="color: rgb(89, 89, 89);">Cinza</option>
+				<option style="color: green;">Verde</option>
+				<option selected="selected" style="color: rgb(15, 223, 15);">Verde folha</option>
+				<option style="color: maroon;">Marrom</option>
+				<option style="color: navy;">Azul marinho</option>
+				<option style="color: olive;">Verde musgo</option>
+				<option style="color: orange;">Laranja</option>
+				<option style="color: purple;">Roxo</option>
+				<option style="color: red;">Vermelho</option>
+				<option style="color: rgb(155, 155, 155);">Prata</option>
+				<option style="color: rgb(0, 128, 107);">Verde água</option>
+				<option style="color: rgb(179, 179, 0);">Amarelo</option>
+			</select>
+			<select id="jogador1ia" title="Escolhe se o player é um humano ou o computador" 
+                onclick="document.getElementById('jogador2nome').disabled = this.value !== '0';">
+				<option value="0" selected="selected">Humano</option>
+				<option value="1">IA</option>
+			</select>
+		</div>
+
+        <div id="jogador6input" class="jogador-input">
+			Jogador 6: <input type="text" id="jogador6nome" title="Nome" maxlength="20" value="Jogador 6" />
+			<select id="jogador6cor" title="Cor do Jogador">
+				<option style="color: rgb(2, 216, 216);">Ciano</option>
+				<option style="color: black;">Preto</option>
+				<option style="color: blue;">Azul</option>
+				<option style="color: fuchsia;">Rosa</option>
+				<option style="color: rgb(89, 89, 89);">Cinza</option>
+				<option style="color: green;">Verde</option>
+				<option style="color: rgb(15, 223, 15);">Verde folha</option>
+				<option style="color: maroon;">Marrom</option>
+				<option style="color: navy;">Azul marinho</option>
+				<option style="color: olive;">Verde musgo</option>
+				<option style="color: orange;">Laranja</option>
+				<option style="color: purple;">Roxo</option>
+				<option style="color: red;">Vermelho</option>
+				<option style="color: rgb(155, 155, 155);">Prata</option>
+				<option selected="selected" style="color: rgb(0, 128, 107);">Verde água</option>
+				<option style="color: rgb(179, 179, 0);">Amarelo</option>
+			</select>
+			<select id="jogador6ia" title="Escolhe se o player é um humano ou o computador" 
+                onclick="document.getElementById('jogador6nome').disabled = this.value !== '0';">
+				<option value="0" selected="selected">Humano</option>
+				<option value="1">IA</option>
+			</select>
+		</div>
+
+        <div id="jogador7input" class="jogador-input">
+			Jogador 7: <input type="text" id="jogador7nome" title="Nome" maxlength="20" value="Jogador 7" />
+			<select id="jogador7cor" title="Cor do Jogador">
+				<option style="color: rgb(2, 216, 216);">Ciano</option>
+				<option style="color: black;">Preto</option>
+				<option style="color: blue;">Azul</option>
+				<option style="color: fuchsia;">Rosa</option>
+				<option style="color: rgb(89, 89, 89);">Cinza</option>
+				<option style="color: green;">Verde</option>
+				<option style="color: rgb(15, 223, 15);">Verde folha</option>
+				<option style="color: maroon;">Marrom</option>
+				<option style="color: navy;">Azul marinho</option>
+				<option style="color: olive;">Verde musgo</option>
+				<option selected="selected" style="color: orange;">Laranja</option>
+				<option style="color: purple;">Roxo</option>
+				<option style="color: red;">Vermelho</option>
+				<option style="color: rgb(155, 155, 155);">Prata</option>
+				<option style="color: rgb(0, 128, 107);">Verde água</option>
+				<option style="color: rgb(179, 179, 0);">Amarelo</option>
+			</select>
+			<select id="jogador7ia" title="Escolhe se o player é um humano ou o computador" 
+                onclick="document.getElementById('jogador7nome').disabled = this.value !== '0';">
+				<option value="0" selected="selected">Humano</option>
+				<option value="1">IA</option>
+			</select>
+		</div>
+
+        <div id="jogador8input" class="jogador-input">
+			Jogador 8: <input type="text" id="jogador8nome" title="Nome" maxlength="20" value="Jogador 8" />
+			<select id="jogador8cor" title="Cor do Jogador">
+				<option style="color: rgb(2, 216, 216);">Ciano</option>
+				<option style="color: black;">Preto</option>
+				<option selected="selected" style="color: blue;">Azul</option>
+				<option style="color: fuchsia;">Rosa</option>
+				<option style="color: rgb(89, 89, 89);">Cinza</option>
+				<option style="color: green;">Verde</option>
+				<option style="color: rgb(15, 223, 15);">Verde folha</option>
+				<option style="color: maroon;">Marrom</option>
+				<option style="color: navy;">Azul marinho</option>
+				<option style="color: olive;">Verde musgo</option>
+				<option style="color: orange;">Laranja</option>
+				<option style="color: purple;">Roxo</option>
+				<option style="color: red;">Vermelho</option>
+				<option style="color: rgb(155, 155, 155);">Prata</option>
+				<option style="color: rgb(0, 128, 107);">Verde água</option>
+				<option style="color: rgb(179, 179, 0);">Amarelo</option>
+			</select>
+			<select id="jogador8ia" title="Escolhe se o player é um humano ou o computador" 
+                onclick="document.getElementById('jogador8nome').disabled = this.value !== '0';">
+				<option value="0" selected="selected">Humano</option>
+				<option value="1">IA</option>
+			</select>
+		</div>
+
+        <div style="margin: 20px 0px;">
+			<input type="button" value="Jogar" onclick="configInicial();" title="Começa o jogo." />
+		</div>
+
+     
 </body>
 </html>
