@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monopoly RJ</title>
+</head>
+<body>
+    <div id="config-inicial">
+		<div style="margin-bottom: 20px;">
+			Quantas pessoas vão jogar?
+            <div style="margin-top: 5px;">
+                <select id="n-jogadores" title="Seleciona o número de jogadores.">
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option selected="selected">5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                </select>
+            </div>
+		</div>
+
+        <div id="jogador1input" class="jogador-input">
+			Jogador 1: <input type="text" id="jogador1nome" title="Nome" maxlength="20" value="Jogador 1" />
+			<select id="player1color" title="Player color">
+				<option style="color: rgb(2, 216, 216);">Ciano</option>
+				<option style="color: black;">Preto</option>
+				<option style="color: blue;">Azul</option>
+				<option selected="selected" style="color: fuchsia;">Rosa</option>
+				<option style="color: rgb(89, 89, 89);">Cinza</option>
+				<option style="color: green;">Verde</option>
+				<option style="color: rgb(15, 223, 15);">Verde folha</option>
+				<option style="color: maroon;">Marrom</option>
+				<option style="color: navy;">Azul marinho</option>
+				<option style="color: olive;">Verde musgo</option>
+				<option style="color: orange;">Laranja</option>
+				<option style="color: purple;">Roxo</option>
+				<option style="color: red;">Vermelho</option>
+				<option style="color: rgb(155, 155, 155);">Prata</option>
+				<option style="color: rgb(0, 128, 107);">Verde água</option>
+				<option style="color: rgb(179, 179, 0);">Amarelo</option>
+			</select>
+			<select id="jogador1ai" title="Escolhe se o player é um humano ou o computador" 
+                onclick="document.getElementById('jogador1nome').disabled = this.value !== '0';">
+				<option value="0" selected="selected">Humano</option>
+				<option value="1">IA</option>
+			</select>
+		</div>
+
+		
+</body>
+</html>
