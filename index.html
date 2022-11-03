@@ -242,6 +242,66 @@
         <div style="margin: 20px 0px;">
 			<input type="button" value="Jogar" onclick="configInicial();" title="Começa o jogo." />
 		</div>
+		
+		<div id="controle">
+		<table>
+			<tr>
+				<td style="text-align: left; vertical-align: top; border: none;">
+					<div id="menu">
+						<table id="menutabela" cellspacing="0">
+							<tr>
+								<td class="item-do-menu" id="comprar-item-do-menu">
+
+									<a href="javascript:void(0);" title="Ver alertas e comprar a propriedade na qual você está. ">Comprar</a>
+								</td>
+								<td class="item-do-menu" id="gerir-item-do-menu">
+
+									<a href="javascript:void(0);" title="Ver, hipotecar ou melhorar sua propriedade. ">Gerir</a>
+								</td>
+								<td class="item-do-menu" id="troca-item-do-menu">
+
+									<a href="javascript:void(0);" title="Troque de propriedades com outros jogadores.">Trocar</a>
+								</td>
+							</tr>
+						</table>
+					</div>
+
+					<div id="comprar">
+						<div id="alerta"></div>
+						<div id="pousar"></div>
+					</div>
+
+					<div id="gerenciar">
+						<div id="opcao">
+							<div id="construcoes" title="Construções Disponíveis"></div>
+							<input type="button" value="Comprar casa" id="botaoComprarCasa"/>
+							<input type="button" value="Hipoteca" id="botaoHipoteca" />
+							<input type="button" value="Vender casa" id="botaoVenderCasa"/>
+						</div>
+						<div id="possui"></div>
+					</div>
+				</td>
+				<td style="vertical-align: top; border: none;">
+					<div id="estatisticasRapidas" style="">
+							<div><span id="pnome" >Jogador 1</span>:</div>
+							<div><span id="pdinheiro">$1500</span></div>
+					</div>
+					<div>
+						<div id="dado0" title="Dado" class="dado dado-sem-img"></div>
+						<div id="dado1" title="Dado" class="dado dado-sem-img"></div>
+					</div>
+
+				</td>
+			</tr><tr>
+				<td colspan="2" style="border: none">
+					<div style="padding-top: 8px;">
+						<input type="button" id="proximoBotao" title="Role o dado e mova sua peça de acordo" value="Rolar dado"/>
+						<input type="button" id="desistirBotao" title="Se você não consegue pagar a sua dívida então deve se retirar do jogo." value="Desistir" onclick="jogo.desistir();" />
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
 
      
 </body>
