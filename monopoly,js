@@ -21,7 +21,7 @@ function configInicio() {
 		}
 	}
 
-	$("#tabuleiro, #barraDinheiro").show();
+	$("#tabuleiro").show();
 	$("#configInicio").hide();
 
 	if (jCount === 2) {
@@ -51,9 +51,9 @@ function jogar() {
 
 	document.getElementById("pnome").innerHTML = p.nome;
 
-	addAlert("É o turno do(a) " + p.nome + ".");
+	addAlert("ï¿½ o turno do(a) " + p.nome + ".");
 
-	// Verifica falência.
+	// Verifica falï¿½ncia.
 	p.pague(0, p.credor);
 
 	$("#pousar, #opcao, #gerenciar").hide();
@@ -64,28 +64,28 @@ function jogar() {
 		document.getElementById("proximoBotao").focus();
 	}
 	document.getElementById("proximoBotao").value = "Rolar dado";
-	document.getElementById("proximoBotao").title = "Role o dado e mova sua peça de acordo";
+	document.getElementById("proximoBotao").title = "Role o dado e mova sua peï¿½a de acordo";
 
 	$("#dado0").hide();
 	$("#dado1").hide();
 
 	if (p.cadeia) {
 		$("#pousar").show();
-		document.getElementById("pousar").innerHTML = "Você está na cadeia.<input type='button' title='Pague $50 de taxa para sair da cadeia imediatamente.' value='Pague $50 de taxa' onclick='pagueCinquenta();' />";
+		document.getElementById("pousar").innerHTML = "Vocï¿½ estï¿½ na cadeia.<input type='button' title='Pague $50 de taxa para sair da cadeia imediatamente.' value='Pague $50 de taxa' onclick='pagueCinquenta();' />";
 
 		if (p.bauDaComunidadeCartaPrisao || p.chanceCartaPrisao) {
-			document.getElementById("pousar").innerHTML += "<input type='button' id='sairDaCadeiaBotao' title='Use a carta &quot;Sair da Cadeia de Graça&quot;.' onclick='usarCartaPrisao();' value='Usar Carta' />";
+			document.getElementById("pousar").innerHTML += "<input type='button' id='sairDaCadeiaBotao' title='Use a carta &quot;Sair da Cadeia de Graï¿½a&quot;.' onclick='usarCartaPrisao();' value='Usar Carta' />";
 		}
 
-		document.getElementById("proximoBotao").title = "Role o dado. Se você tirar dois números iguais, sairá da cadeia.";
+		document.getElementById("proximoBotao").title = "Role o dado. Se vocï¿½ tirar dois nï¿½meros iguais, sairï¿½ da cadeia.";
 
 		if (p.cadeiaRodarDado === 0)
-			addAlert("Esse é o primeiro turno de " + p.nome + "na cadeia.");
+			addAlert("Esse ï¿½ o primeiro turno de " + p.nome + "na cadeia.");
 		else if (p.cadeiaRodarDado === 1)
-			addAlert("Esse é o segundo turno de " + p.nome + "na cadeia.");
+			addAlert("Esse ï¿½ o segundo turno de " + p.nome + "na cadeia.");
 		else if (p.cadeiaRodarDado === 2) {
-			document.getElementById("pousar").innerHTML += "<div>ATENÇÃO: Se você não tirar dois números iguais, você<i>deve</i> pagar uma taxa de $50.</div>";
-			addAlert("Esse é o terceiro turno de " + p.nome + "na cadeia.");
+			document.getElementById("pousar").innerHTML += "<div>ATENï¿½ï¿½O: Se vocï¿½ nï¿½o tirar dois nï¿½meros iguais, vocï¿½<i>deve</i> pagar uma taxa de $50.</div>";
+			addAlert("Esse ï¿½ o terceiro turno de " + p.nome + "na cadeia.");
 		}
 
 		if (!p.humano && p.IA.pagarFianca()) {
