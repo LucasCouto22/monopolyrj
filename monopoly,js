@@ -36,3 +36,78 @@ function configInicio() {
 	// jogar();
 }
 
+function jogar() {
+	if (jogo.leilao()) {
+		return;
+	}
+
+	turno++;
+	if (turno > pcontador) {
+		turno -= pcontador;
+	}
+
+	var p = jogador[turno];
+	jogo.resetarDado();
+
+	document.getElementById("pnome").innerHTML = p.nome;
+
+	addAlert("É o turno do(a) " + p.nome + ".");
+
+	// Verifica falência.
+	p.pague(0, p.credor);
+
+	$("#pousar, #opcao, #gerenciar").hide();
+	$("#tabuleiro, #controle, #barraDinheiro, #verEstatisticas, #comprar").show();
+
+	contagemdouble = 0;
+	if (p.humano) {
+		document.getElementById("proximoBotao").focus();
+	}
+	document.getElementById("proximoBotao").value = "Rolar dado";
+	document.getElementById("proximoBotao").title = "Role o dado e mova sua peça de acordo";
+
+	$("#dado0").hide();
+	$("#dado1").hide();
+
+	if (p.cadeia) {
+		$("#pousar").show();
+		document.getElementById("pousar").innerHTML = "Você está na cadeia.<input type='button' title='Pague $50 de taxa para sair da cadeia imediatamente.' value='Pague $50 de taxa' onclick='pagueCinquenta();' />";
+
+		if (p.bauDaComunidadeCartaPrisao || p.chanceCartaPrisao) {
+			document.getElementById("pousar").innerHTML += "<input type='button' id='sairDaCadeiaBotao' title='Use a carta &quot;Sair da Cadeia de Graça&quot;.' onclick='usarCartaPrisao();' value='Usar Carta' />";
+		}
+
+		document.getElementById("proximoBotao").title = "Role o dado. Se você tirar dois números iguais, sairá da cadeia.";
+
+		if (p.cadeiaRodarDado === 0)
+			addAlert("Esse é o primeiro turno de " + p.nome + "na cadeia.");
+		else if (p.cadeiaRodarDado === 1)
+			addAlert("Esse é o segundo turno de " + p.nome + "na cadeia.");
+		else if (p.cadeiaRodarDado === 2) {
+			document.getElementById("pousar").innerHTML += "<div>ATENÇÃO: Se você não tirar dois números iguais, você<i>deve</i> pagar uma taxa de $50.</div>";
+			addAlert("Esse é o terceiro turno de " + p.nome + "na cadeia.");
+		}
+
+		if (!p.humano && p.IA.pagarFianca()) {
+			if (p.bauDaComunidadeCartaPrisao || p.chanceCartaPrisao) {
+				usarCartaPrisao()
+			} else {
+				pagueCinquenta();
+			}
+		}
+	}
+
+	atualizarDinheiro();
+	atualizarPosicao();
+	atualizarDono();
+
+	$(".dinheiro-barra-indicador").hide();
+	$("#p" + turno + "indicador").show();
+
+	if (!p.humano) {
+		if (!p.IA.antesDoTurno()) {
+			jogo.proximo();
+		}
+	}
+}
+
