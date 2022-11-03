@@ -33,7 +33,7 @@ function configInicio() {
 	document.getElementById("stats").style.top = "0px";
 	document.getElementById("stats").style.left = "0px";
 
-	// jogar();
+	jogar();
 }
 
 function jogar() {
