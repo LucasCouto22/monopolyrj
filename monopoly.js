@@ -2731,7 +2731,7 @@ window.onload = function() {
 
 
 	$("<div>", {id: "jailpositionholder" }).appendTo("#jail");
-	$("<span>").text("Jail").appendTo("#jail");
+	$("<span>").text("Prisão").appendTo("#jail");
 
 	document.getElementById("jail").enlargeId = "enlarge40";
 
