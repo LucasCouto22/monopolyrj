@@ -37,7 +37,7 @@ function Card(text, action) {
 function corrections() {
 	document.getElementById("cell1name").textContent = "Av. Presidente Vargas";
 
-	// Add images to enlarges.
+
 	document.getElementById("enlarge5token").innerHTML += '<img src="images/train_icon.png" height="60" width="65" alt="" style="position: relative; bottom: 20px;" />';
 	document.getElementById("enlarge15token").innerHTML += '<img src="images/train_icon.png" height="60" width="65" alt="" style="position: relative; top: -20px;" />';
 	document.getElementById("enlarge25token").innerHTML += '<img src="images/train_icon.png" height="60" width="65" alt="" style="position: relative; top: -20px;" />';
@@ -47,25 +47,25 @@ function corrections() {
 }
 
 function utiltext() {
-	return '&nbsp;&nbsp;&nbsp;&nbsp;If one "Utility" is owned rent is 4 times amount shown on dice.<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;If both "Utilitys" are owned rent is 10 times amount shown on dice.';
+	return '&nbsp;&nbsp;&nbsp;&nbsp;Se um "Utilitário" for de propriedade, o aluguel é 4 vezes o valor mostrado nos dados.<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;Se ambos os "Utilitários" forem de propriedade, o aluguel é 10 vezes o valor mostrado nos dados.';
 }
 
 function transtext() {
-	return '<div style="font-size: 14px; line-height: 1.5;">Rent<span style="float: right;">$25.</span><br />If 2 Railroads are owned<span style="float: right;">50.</span><br />If 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "<span style="float: right;">100.</span><br />If 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "<span style="float: right;">200.</span></div>';
+	return '<div style="font-size: 14px; line-height: 1.5;">Rent<span style="float: right;">$25.</span><br />Se 2 ferrovias são de propriedade<span style="float: right;">50.</span><br />Se 3 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "<span style="float: right;">100.</span><br />Se 4 &nbsp; &nbsp; " &nbsp; &nbsp; " &nbsp; &nbsp; "<span style="float: right;">200.</span></div>';
 }
 
 function luxurytax() {
-	addAlert(player[turn].name + " paid $100 for landing on Luxury Tax.");
+	addAlert(player[turn].name + " pagou $100 por aterrissar no Imposto de Renda.");
 	player[turn].pay(100, 0);
 
-	$("#landed").show().text("You landed on Luxury Tax. Pay $100.");
+	$("#landed").show().text("Você desembarcou no Imposto de Renda. Pague $ 100.");
 }
 
 function citytax() {
-	addAlert(player[turn].name + " paid $200 for landing on City Tax.");
+	addAlert(player[turn].name + " pagou $200 por aterrissar no Imposto de Renda.");
 	player[turn].pay(200, 0);
 
-	$("#landed").show().text("You landed on City Tax. Pay $200.");
+	$("#landed").show().text("Você desembarcou no Imposto de Renda. Pague $200.");
 }
 
 var square = [];
@@ -76,7 +76,7 @@ square[2] = new Square("Cofre", "COMPRE UMA CARTA E SIGA AS INSTRUÇÕES", "#FFF
 square[3] = new Square("Av. Rio Branco", "R$60", "#8B4513", 60, 3, 4, 20, 60, 180, 320, 450);
 square[4] = new Square("Receita Federal", "Pague R$200, Neymar", "#FFFFFF");
 square[5] = new Square("Estação Largo do Machado", "R$200", "#FFFFFF", 200, 1);
-square[6] = new Square("Oriental Avenue", "R$100", "#87CEEB", 100, 4, 6, 30, 90, 270, 400, 550);
+square[6] = new Square("Rua São Clemente", "R$100", "#87CEEB", 100, 4, 6, 30, 90, 270, 400, 550);
 square[7] = new Square("Sorte ou revés", "COMPRE UMA CARTA E SIGA AS INSTRUÇÕES", "#FFFFFF");
 square[8] = new Square("Avenida Pasteur", "R$100", "#87CEEB", 100, 4, 6, 30, 90, 270, 400, 550);
 square[9] = new Square("Rua Pinheiro Machado", "R$120", "#87CEEB", 120, 4, 8, 40, 100, 300, 450, 600);
@@ -115,18 +115,18 @@ var communityChestCards = [];
 var chanceCards = [];
 
 communityChestCards[0] = new Card("Saída livre da prisão. Esta carta deverá ser mantida até ser necessária ou vendida.", function(p) { p.communityChestJailCard = true; updateOwned();});
-communityChestCards[1] = new Card("Você ganhou o segundo lugar em um concurso de beleza. Receba R$10.", function() { addamount(10, 'Community Chest');});
-communityChestCards[2] = new Card("Da venda de ações, você recebe R$50.", function() { addamount(50, 'Community Chest');});
-communityChestCards[3] = new Card("Seguro de vida venceu. Receba R$100.", function() { addamount(100, 'Community Chest');});
-communityChestCards[4] = new Card("Restituição do imposto de renda. Receba R$20.", function() { addamount(20, 'Community Chest');});
-communityChestCards[5] = new Card("Seu fundo de férias venceu. Receba R$100.", function() { addamount(100, 'Community Chest');});
-communityChestCards[6] = new Card("Você herdou R$100.", function() { addamount(100, 'Community Chest');});
-communityChestCards[7] = new Card("Receba R$25 de taxa de consultoria.", function() { addamount(25, 'Community Chest');});
-communityChestCards[8] = new Card("Pague taxas hospitalares de R$100.", function() { subtractamount(100, 'Community Chest');});
-communityChestCards[9] = new Card("Erro do banco a seu favor. Receba R$200.", function() { addamount(200, 'Community Chest');});
-communityChestCards[10] = new Card("Pague taxas escolares de R$50.", function() { subtractamount(50, 'Community Chest');});
-communityChestCards[11] = new Card("Honorários do médico. Pague R$50.", function() { subtractamount(50, 'Community Chest');});
-communityChestCards[12] = new Card("É o teu aniversário. Receba R$10 de cada jogador.", function() { collectfromeachplayer(10, 'Community Chest');});
+communityChestCards[1] = new Card("Você ganhou o segundo lugar em um concurso de beleza. Receba R$10.", function() { addamount(10, 'Cofre');});
+communityChestCards[2] = new Card("Da venda de ações, você recebe R$50.", function() { addamount(50, 'Cofre');});
+communityChestCards[3] = new Card("Seguro de vida venceu. Receba R$100.", function() { addamount(100, 'Cofre');});
+communityChestCards[4] = new Card("Restituição do imposto de renda. Receba R$20.", function() { addamount(20, 'Cofre');});
+communityChestCards[5] = new Card("Seu fundo de férias venceu. Receba R$100.", function() { addamount(100, 'Cofre');});
+communityChestCards[6] = new Card("Você herdou R$100.", function() { addamount(100, 'Cofre');});
+communityChestCards[7] = new Card("Receba R$25 de taxa de consultoria.", function() { addamount(25, 'Cofre');});
+communityChestCards[8] = new Card("Pague taxas hospitalares de R$100.", function() { subtractamount(100, 'Cofre');});
+communityChestCards[9] = new Card("Erro do banco a seu favor. Receba R$200.", function() { addamount(200, 'Cofre');});
+communityChestCards[10] = new Card("Pague taxas escolares de R$50.", function() { subtractamount(50, 'Cofre');});
+communityChestCards[11] = new Card("Honorários do médico. Pague R$50.", function() { subtractamount(50, 'Cofre');});
+communityChestCards[12] = new Card("É o teu aniversário. Receba R$10 de cada jogador.", function() { collectfromeachplayer(10, 'Cofre');});
 communityChestCards[13] = new Card("Avance para o Início (Receba R$200).", function() { advance(0);});
 communityChestCards[14] = new Card("Você é avaliado para reparos na rua. Pague R$40 por casa e R$ 115 por hotel.", function() { streetrepairs(40, 115);});
 communityChestCards[15] = new Card("Vá para a prisão", "Vá diretamente para a prisão. Não passe pelo Início. Não receba R$200", function() { gotojail();});
