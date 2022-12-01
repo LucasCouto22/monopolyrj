@@ -2174,3 +2174,746 @@ function buy() {
 	}
 }
 
+function mortgage(index) {
+	var sq = square[index];
+	var p = player[sq.owner];
+
+	if (sq.house > 0 || sq.hotel > 0 || sq.mortgage) {
+		return false;
+	}
+
+	var mortgagePrice = Math.round(sq.price * 0.5);
+	var unmortgagePrice = Math.round(sq.price * 0.55);
+
+	sq.mortgage = true;
+	p.money += mortgagePrice;
+
+	document.getElementById("mortgagebutton").value = "Desipoteque por $" + unmortgagePrice;
+	document.getElementById("mortgagebutton").title = "Desipoteque " + sq.name + " por $" + unmortgagePrice + ".";
+
+	addAlert(p.name + " hipotecado " + sq.name + " por $" + mortgagePrice + ".");
+	updateOwned();
+	updateMoney();
+
+	return true;
+}
+
+function unmortgage(index) {
+	var sq = square[index];
+	var p = player[sq.owner];
+	var unmortgagePrice = Math.round(sq.price * 0.55);
+	var mortgagePrice = Math.round(sq.price * 0.5);
+
+	if (unmortgagePrice > p.money || !sq.mortgage) {
+		return false;
+	}
+
+	p.pay(unmortgagePrice, 0);
+	sq.mortgage = false;
+	document.getElementById("mortgagebutton").value = "Hipotecado por $" + mortgagePrice;
+	document.getElementById("mortgagebutton").title = "Hipoteca " + sq.name + " por $" + mortgagePrice + ".";
+
+	addAlert(p.name + " desipotecado " + sq.name + " por $" + unmortgagePrice + ".");
+	updateOwned();
+	return true;
+}
+
+
+function land(increasedRent) {
+	increasedRent = !!increasedRent; 
+
+	var p = player[turn];
+	var s = square[p.position];
+
+	var die1 = game.getDie(1);
+	var die2 = game.getDie(2);
+
+	$("#landed").show();
+	document.getElementById("landed").innerHTML = "Você pousou em " + s.name + ".";
+	s.landcount++;
+	addAlert(p.name + " pousou em " + s.name + ".");
+
+	if (s.price !== 0 && s.owner === 0) {
+
+		if (!p.human) {
+
+			if (p.AI.buyProperty(p.position)) {
+				buy();
+			}
+		} else {
+			document.getElementById("landed").innerHTML = "<div>Você pousou no <a href='javascript:void(0);' onmouseover='showdeed(" + p.position + ");' onmouseout='hidedeed();' class='statscellcolor'>" + s.name + "</a>.<input type='button' onclick='buy();' value='Comprar ($" + s.price + ")' title='Comprar " + s.name + " for " + s.pricetext + ".'/></div>";
+		}
+
+
+		game.addPropertyToAuctionQueue(p.position);
+	}
+
+
+	if (s.owner !== 0 && s.owner != turn && !s.mortgage) {
+		var groupowned = true;
+		var rent;
+
+
+		if (p.position == 5 || p.position == 15 || p.position == 25 || p.position == 35) {
+			if (increasedRent) {
+				rent = 25;
+			} else {
+				rent = 12.5;
+			}
+
+			if (s.owner == square[5].owner) {
+				rent *= 2;
+			}
+			if (s.owner == square[15].owner) {
+				rent *= 2;
+			}
+			if (s.owner == square[25].owner) {
+				rent *= 2;
+			}
+			if (s.owner == square[35].owner) {
+				rent *= 2;
+			}
+
+		} else if (p.position === 12) {
+			if (increasedRent || square[28].owner == s.owner) {
+				rent = (die1 + die2) * 10;
+			} else {
+				rent = (die1 + die2) * 4;
+			}
+
+		} else if (p.position === 28) {
+			if (increasedRent || square[12].owner == s.owner) {
+				rent = (die1 + die2) * 10;
+			} else {
+				rent = (die1 + die2) * 4;
+			}
+
+		} else {
+
+			for (var i = 0; i < 40; i++) {
+				sq = square[i];
+				if (sq.groupNumber == s.groupNumber && sq.owner != s.owner) {
+					groupowned = false;
+				}
+			}
+
+			if (!groupowned) {
+				rent = s.baserent;
+			} else {
+				if (s.house === 0) {
+					rent = s.baserent * 2;
+				} else {
+					rent = s["rent" + s.house];
+				}
+			}
+		}
+
+		addAlert(p.name + " pagou $" + rent + " aluguel para " + player[s.owner].name + ".");
+		p.pay(rent, s.owner);
+		player[s.owner].money += rent;
+
+		document.getElementById("landed").innerHTML = "Você pousou no " + s.name + ". " + player[s.owner].name + " coletou $" + rent + " de aluguel.";
+	} else if (s.owner > 0 && s.owner != turn && s.mortgage) {
+		document.getElementById("landed").innerHTML = "Você pousou no " + s.name + ". A propriedade está hipotecada; nenhum aluguel foi cobrado.";
+	}
+
+
+	if (p.position === 4) {
+		citytax();
+	}
+
+
+	if (p.position === 30) {
+		updateMoney();
+		updatePosition();
+
+		if (p.human) {
+			popup("<div>Vá para a cadeia. Vá diretamente para a prisão. Não passe Início. Não colete $ 200.</div>", gotojail);
+		} else {
+			gotojail();
+		}
+
+		return;
+	}
+
+	if (p.position === 38) {
+		luxurytax();
+	}
+
+	updateMoney();
+	updatePosition();
+	updateOwned();
+
+	if (!p.human) {
+		popup(p.AI.alertList, chanceCommunityChest);
+		p.AI.alertList = "";
+	} else {
+		chanceCommunityChest();
+	}
+}
+
+function roll() {
+	var p = player[turn];
+
+	$("#option").hide();
+	$("#buy").show();
+	$("#manage").hide();
+
+	if (p.human) {
+		document.getElementById("nextbutton").focus();
+	}
+	document.getElementById("nextbutton").value = "Terminar turno";
+	document.getElementById("nextbutton").title = "Terminar turno e avançar para o próximo jogador.";
+
+	game.rollDice();
+	var die1 = game.getDie(1);
+	var die2 = game.getDie(2);
+
+	doublecount++;
+
+	if (die1 == die2) {
+		addAlert(p.name + " tirou " + (die1 + die2) + " - doubles.");
+	} else {
+		addAlert(p.name + " tirou " + (die1 + die2) + ".");
+	}
+
+	if (die1 == die2 && !p.jail) {
+		updateDice(die1, die2);
+
+		if (doublecount < 3) {
+			document.getElementById("nextbutton").value = "Role novamente";
+			document.getElementById("nextbutton").title = "Você tirou doubles. Role novamente.";
+
+		} else if (doublecount === 3) {
+			p.jail = true;
+			doublecount = 0;
+			addAlert(p.name + " tirou doubles três vezes seguidas.");
+			updateMoney();
+
+
+			if (p.human) {
+				popup("Você tirou doubles três vezes seguidas. Vá para a prisão.", gotojail);
+			} else {
+				gotojail();
+			}
+
+			return;
+		}
+	} else {
+		document.getElementById("nextbutton").value = "Terminar turno";
+		document.getElementById("nextbutton").title = "Terminar turno e avançar para o próximo jogador.";
+		doublecount = 0;
+	}
+
+	updatePosition();
+	updateMoney();
+	updateOwned();
+
+	if (p.jail === true) {
+		p.jailroll++;
+
+		updateDice(die1, die2);
+		if (die1 == die2) {
+			document.getElementById("jail").style.border = "1px solid black";
+			document.getElementById("cell11").style.border = "2px solid " + p.color;
+			$("#landed").hide();
+
+			p.jail = false;
+			p.jailroll = 0;
+			p.position = 10 + die1 + die2;
+			doublecount = 0;
+
+			addAlert(p.name + " tirou doubles para sair da cadeia.");
+
+			land();
+		} else {
+			if (p.jailroll === 3) {
+
+				if (p.human) {
+					popup("<p>Você deve pagar a multa de $50.</p>", function() {
+						payfifty();
+						player[turn].position=10 + die1 + die2;
+						land();
+					});
+				} else {
+					payfifty();
+					p.position = 10 + die1 + die2;
+					land();
+				}
+			} else {
+				$("#landed").show();
+				document.getElementById("landed").innerHTML = "Você está na cadeia.";
+
+				if (!p.human) {
+					popup(p.AI.alertList, game.next);
+					p.AI.alertList = "";
+				}
+			}
+		}
+
+
+	} else {
+		updateDice(die1, die2);
+
+		// Move player
+		p.position += die1 + die2;
+
+		// Collect $200 salary as you pass GO
+		if (p.position >= 40) {
+			p.position -= 40;
+			p.money += 200;
+			addAlert(p.name + " coletou o salário de $200 ao passar pelo Início.");
+		}
+
+		land();
+	}
+}
+
+function play() {
+	if (game.auction()) {
+		return;
+	}
+
+	turn++;
+	if (turn > pcount) {
+		turn -= pcount;
+	}
+
+	var p = player[turn];
+	game.resetDice();
+
+	document.getElementById("pname").innerHTML = p.name;
+
+	addAlert("É o turno de " + p.name + ".");
+
+	// Check for bankruptcy.
+	p.pay(0, p.creditor);
+
+	$("#landed, #option, #manage").hide();
+	$("#board, #control, #moneybar, #viewstats, #buy").show();
+
+	doublecount = 0;
+	if (p.human) {
+		document.getElementById("nextbutton").focus();
+	}
+	document.getElementById("nextbutton").value = "Rodar o Dado";
+	document.getElementById("nextbutton").title = "Rode o dado e mova sua peça de acordo.";
+
+	$("#die0").hide();
+	$("#die1").hide();
+
+	if (p.jail) {
+		$("#landed").show();
+		document.getElementById("landed").innerHTML = "Você está na cadeia.<input type='button' title='Pague a multa de $50 para sair da cadeia imediatamente.' value='Pague a multa de $50' onclick='payfifty();' />";
+
+		if (p.communityChestJailCard || p.chanceJailCard) {
+			document.getElementById("landed").innerHTML += "<input type='button' id='gojfbutton' title='Use &quot;Sair da Cadeia de Graça&quot; carta.' onclick='useJailCard();' value='Usa carta' />";
+		}
+
+		document.getElementById("nextbutton").title = "Rode o dado. Se você tirar doubles, você irá sair da cadeia.";
+
+		if (p.jailroll === 0)
+			addAlert("Esse é o primeiro turno de " + p.name + " na cadeia.");
+		else if (p.jailroll === 1)
+			addAlert("Esse é o segundo turno de " + p.name + " na cadeia.");
+		else if (p.jailroll === 2) {
+			document.getElementById("landed").innerHTML += "<div>NOTA: Se você não tirar doubles neste turno você <i>DEVE</i> pagar a multa de $50.</div>";
+			addAlert("Esse é o terceiro turno de " + p.name + " na cadeia.");
+		}
+
+		if (!p.human && p.AI.postBail()) {
+			if (p.communityChestJailCard || p.chanceJailCard) {
+				useJailCard();
+			} else {
+				payfifty();
+			}
+		}
+	}
+
+	updateMoney();
+	updatePosition();
+	updateOwned();
+
+	$(".money-bar-arrow").hide();
+	$("#p" + turn + "arrow").show();
+
+	if (!p.human) {
+		if (!p.AI.beforeTurn()) {
+			game.next();
+		}
+	}
+}
+
+function setup() {
+	pcount = parseInt(document.getElementById("playernumber").value, 10);
+
+	var playerArray = new Array(pcount);
+	var p;
+
+	playerArray.randomize();
+
+	for (var i = 1; i <= pcount; i++) {
+		p = player[playerArray[i - 1]];
+
+
+		p.color = document.getElementById("player" + i + "color").value.toLowerCase();
+
+		if (document.getElementById("player" + i + "ai").value === "0") {
+			p.name = document.getElementById("player" + i + "name").value;
+			p.human = true;
+		} else if (document.getElementById("player" + i + "ai").value === "1") {
+			p.human = false;
+			p.AI = new AITest(p);
+		}
+	}
+
+	$("#board, #moneybar").show();
+	$("#setup").hide();
+
+	if (pcount === 2) {
+		document.getElementById("stats").style.width = "454px";
+	} else if (pcount === 3) {
+		document.getElementById("stats").style.width = "686px";
+	}
+
+	document.getElementById("stats").style.top = "0px";
+	document.getElementById("stats").style.left = "0px";
+
+	play();
+}
+
+
+function getCheckedProperty() {
+	for (var i = 0; i < 42; i++) {
+		if (document.getElementById("propertycheckbox" + i) && document.getElementById("propertycheckbox" + i).checked) {
+			return i;
+		}
+	}
+	return -1; 
+}
+
+
+function playernumber_onchange() {
+	pcount = parseInt(document.getElementById("playernumber").value, 10);
+
+	$(".player-input").hide();
+
+	for (var i = 1; i <= pcount; i++) {
+		$("#player" + i + "input").show();
+	}
+}
+
+function menuitem_onmouseover(element) {
+	element.className = "menuitem menuitem_hover";
+	return;
+}
+
+function menuitem_onmouseout(element) {
+	element.className = "menuitem";
+	return;
+}
+
+window.onload = function() {
+	game = new Game();
+
+	for (var i = 0; i <= 8; i++) {
+		player[i] = new Player("", "");
+		player[i].index = i;
+	}
+
+	var groupPropertyArray = [];
+	var groupNumber;
+
+	for (var i = 0; i < 40; i++) {
+		groupNumber = square[i].groupNumber;
+
+		if (groupNumber > 0) {
+			if (!groupPropertyArray[groupNumber]) {
+				groupPropertyArray[groupNumber] = [];
+			}
+
+			groupPropertyArray[groupNumber].push(i);
+		}
+	}
+
+	for (var i = 0; i < 40; i++) {
+		groupNumber = square[i].groupNumber;
+
+		if (groupNumber > 0) {
+			square[i].group = groupPropertyArray[groupNumber];
+		}
+
+		square[i].index = i;
+	}
+
+	AITest.count = 0;
+
+	player[1].human = true;
+	player[0].name = "o banco";
+
+	communityChestCards.index = 0;
+	chanceCards.index = 0;
+
+	communityChestCards.deck = [];
+	chanceCards.deck = [];
+
+	for (var i = 0; i < 16; i++) {
+		chanceCards.deck[i] = i;
+		communityChestCards.deck[i] = i;
+	}
+
+	chanceCards.deck.sort(function() {return Math.random() - 0.5;});
+	communityChestCards.deck.sort(function() {return Math.random() - 0.5;});
+
+	$("#playernumber").on("change", playernumber_onchange);
+	playernumber_onchange();
+
+	$("#nextbutton").click(game.next);
+	$("#noscript").hide();
+	$("#setup, #noF5").show();
+
+	var enlargeWrap = document.body.appendChild(document.createElement("div"));
+
+	enlargeWrap.id = "enlarge-wrap";
+
+	var HTML = "";
+	for (var i = 0; i < 40; i++) {
+		HTML += "<div id='enlarge" + i + "' class='enlarge'>";
+		HTML += "<div id='enlarge" + i + "color' class='enlarge-color'></div><br /><div id='enlarge" + i + "name' class='enlarge-name'></div>";
+		HTML += "<br /><div id='enlarge" + i + "price' class='enlarge-price'></div>";
+		HTML += "<br /><div id='enlarge" + i + "token' class='enlarge-token'></div></div>";
+	}
+
+	enlargeWrap.innerHTML = HTML;
+
+	var currentCell;
+	var currentCellAnchor;
+	var currentCellPositionHolder;
+	var currentCellName;
+	var currentCellOwner;
+
+	for (var i = 0; i < 40; i++) {
+		s = square[i];
+
+		currentCell = document.getElementById("cell" + i);
+
+		currentCellAnchor = currentCell.appendChild(document.createElement("div"));
+		currentCellAnchor.id = "cell" + i + "anchor";
+		currentCellAnchor.className = "cell-anchor";
+
+		currentCellPositionHolder = currentCellAnchor.appendChild(document.createElement("div"));
+		currentCellPositionHolder.id = "cell" + i + "positionholder";
+		currentCellPositionHolder.className = "cell-position-holder";
+		currentCellPositionHolder.enlargeId = "enlarge" + i;
+
+		currentCellName = currentCellAnchor.appendChild(document.createElement("div"));
+		currentCellName.id = "cell" + i + "name";
+		currentCellName.className = "cell-name";
+		currentCellName.textContent = s.name;
+
+		if (square[i].groupNumber) {
+			currentCellOwner = currentCellAnchor.appendChild(document.createElement("div"));
+			currentCellOwner.id = "cell" + i + "owner";
+			currentCellOwner.className = "cell-owner";
+		}
+
+		document.getElementById("enlarge" + i + "color").style.backgroundColor = s.color;
+		document.getElementById("enlarge" + i + "name").textContent = s.name;
+		document.getElementById("enlarge" + i + "price").textContent = s.pricetext;
+	}
+
+
+	document.getElementById("enlarge0token").innerHTML += '<img src="images/arrow_icon.png" height="40" width="136" alt="" />';
+	document.getElementById("enlarge20price").innerHTML += "<img src='images/free_parking_icon.png' height='80' width='72' alt='' style='position: relative; top: -20px;' />";
+	document.getElementById("enlarge38token").innerHTML += '<img src="images/tax_icon.png" height="60" width="70" alt="" style="position: relative; top: -20px;" />';
+
+	corrections();
+
+
+	$("<div>", {id: "jailpositionholder" }).appendTo("#jail");
+	$("<span>").text("Jail").appendTo("#jail");
+
+	document.getElementById("jail").enlargeId = "enlarge40";
+
+	document.getElementById("enlarge-wrap").innerHTML += "<div id='enlarge40' class='enlarge'><div id='enlarge40color' class='enlarge-color'></div><br /><div id='enlarge40name' class='enlarge-name'>Cadeia</div><br /><div id='enlarge40price' class='enlarge-price'><img src='images/jake_icon.png' height='80' width='80' alt='' style='position: relative; top: -20px;' /></div><br /><div id='enlarge40token' class='enlarge-token'></div></div>";
+
+	document.getElementById("enlarge40name").innerHTML = "Cadeia";
+
+
+	var drag, dragX, dragY, dragObj, dragTop, dragLeft;
+
+	$(".cell-position-holder, #jail").on("mouseover", function(){
+		$("#" + this.enlargeId).show();
+
+	}).on("mouseout", function() {
+		$("#" + this.enlargeId).hide();
+
+	}).on("mousemove", function(e) {
+		var element = document.getElementById(this.enlargeId);
+
+		if (e.clientY + 20 > window.innerHeight - 204) {
+			element.style.top = (window.innerHeight - 204) + "px";
+		} else {
+			element.style.top = (e.clientY + 20) + "px";
+		}
+
+		element.style.left = (e.clientX + 10) + "px";
+	});
+
+
+	$("body").on("mousemove", function(e) {
+		var object;
+
+		if (e.target) {
+			object = e.target;
+		} else if (window.event && window.event.srcElement) {
+			object = window.event.srcElement;
+		}
+
+
+		if (object.classList.contains("propertycellcolor") || object.classList.contains("statscellcolor")) {
+			if (e.clientY + 20 > window.innerHeight - 279) {
+				document.getElementById("deed").style.top = (window.innerHeight - 279) + "px";
+			} else {
+				document.getElementById("deed").style.top = (e.clientY + 20) + "px";
+			}
+			document.getElementById("deed").style.left = (e.clientX + 10) + "px";
+
+
+		} else if (drag) {
+			if (e) {
+				dragObj.style.left = (dragLeft + e.clientX - dragX) + "px";
+				dragObj.style.top = (dragTop + e.clientY - dragY) + "px";
+
+			} else if (window.event) {
+				dragObj.style.left = (dragLeft + window.event.clientX - dragX) + "px";
+				dragObj.style.top = (dragTop + window.event.clientY - dragY) + "px";
+			}
+		}
+	});
+
+
+	$("body").on("mouseup", function() {
+
+		drag = false;
+	});
+	document.getElementById("statsdrag").onmousedown = function(e) {
+		dragObj = document.getElementById("stats");
+		dragObj.style.position = "relative";
+
+		dragTop = parseInt(dragObj.style.top, 10) || 0;
+		dragLeft = parseInt(dragObj.style.left, 10) || 0;
+
+		if (window.event) {
+			dragX = window.event.clientX;
+			dragY = window.event.clientY;
+		} else if (e) {
+			dragX = e.clientX;
+			dragY = e.clientY;
+		}
+
+		drag = true;
+	};
+
+	document.getElementById("popupdrag").onmousedown = function(e) {
+		dragObj = document.getElementById("popup");
+		dragObj.style.position = "relative";
+
+		dragTop = parseInt(dragObj.style.top, 10) || 0;
+		dragLeft = parseInt(dragObj.style.left, 10) || 0;
+
+		if (window.event) {
+			dragX = window.event.clientX;
+			dragY = window.event.clientY;
+		} else if (e) {
+			dragX = e.clientX;
+			dragY = e.clientY;
+		}
+
+		drag = true;
+	};
+
+	$("#mortgagebutton").click(function() {
+		var checkedProperty = getCheckedProperty();
+		var s = square[checkedProperty];
+
+		if (s.mortgage) {
+			if (player[s.owner].money < Math.round(s.price * 0.55)) {
+				popup("<p>Você precisa de mais $" + (Math.round(s.price * 0.55) - player[s.owner].money) + " para desipotecar " + s.name + ".</p>");
+
+			} else {
+				popup("<p>" + player[s.owner].name + ", você tem certeza que quer desipotecar " + s.name + " para $" + Math.round(s.price * 0.55) + "?</p>", function() {
+					unmortgage(checkedProperty);
+				}, "Sim/Nao");
+			}
+		} else {
+			popup("<p>" + player[s.owner].name + ", você tem certeza que quer hipotecar " + s.name + " para $" + Math.round(s.price * 0.5) + "?</p>", function() {
+				mortgage(checkedProperty);
+			}, "Sim/Nao");
+		}
+
+	});
+
+	$("#buyhousebutton").on("click", function() {
+		var checkedProperty = getCheckedProperty();
+		var s = square[checkedProperty];
+		var p = player[s.owner];
+		var houseSum = 0;
+		var hotelSum = 0;
+
+		if (p.money < s.houseprice) {
+			if (s.house === 4) {
+				popup("<p>Você precisa de mais $" + (s.houseprice - player[s.owner].money) + " para comprar um hotel para " + s.name + ".</p>");
+				return;
+			} else {
+				popup("<p>Você precisa de mais $" + (s.houseprice - player[s.owner].money) + " para comprar um hotel para " + s.name + ".</p>");
+				return;
+			}
+		}
+
+		for (var i = 0; i < 40; i++) {
+			if (square[i].hotel === 1) {
+				hotelSum++;
+			} else {
+				houseSum += square[i].house;
+			}
+		}
+
+		if (s.house < 4 && houseSum >= 32) {
+			popup("<p>Todas as 32 casas estão hipotecadas. Você deve esperar até que uma esteja disponível.</p>");
+			return;
+		} else if (s.house === 4 && hotelSum >= 12) {
+			popup("<p>Todos os 12 hotéis estão hipotecados. Você deve esperar até que um esteja disponível.</p>");
+			return;
+		}
+
+		buyHouse(checkedProperty);
+
+	});
+
+	$("#sellhousebutton").click(function() { sellHouse(getCheckedProperty()); });
+
+	$("#viewstats").on("click", showStats);
+	$("#statsclose, #statsbackground").on("click", function() {
+		$("#statswrap").hide();
+		$("#statsbackground").fadeOut(400);
+	});
+
+	$("#buy-menu-item").click(function() {
+		$("#buy").show();
+		$("#manage").hide();
+
+		$("#alert").scrollTop($("#alert").prop("scrollHeight"));
+	});
+
+
+	$("#manage-menu-item").click(function() {
+		$("#manage").show();
+		$("#buy").hide();
+	});
+
+
+	$("#trade-menu-item").click(game.trade);
+
+
+};
